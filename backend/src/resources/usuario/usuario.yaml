@@ -1,0 +1,208 @@
+tags:
+  name: Usuário
+  description: Endpoints da entidade Usuário
+
+paths:
+  /usuario:
+    get:
+      summary: Retorna a listagem de usuários cadastrados
+      tags: [Usuário]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsuarioListResponse'
+    post:
+      summary: Cria um novo usuário
+      tags: [Usuário]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUsuarioDto'
+        required: true
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioResponse'
+        '400':
+          description: Usuário já existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { msg: 'Usuário já existe' }
+
+  /usuario/{id}:
+    get:
+      summary: Retorna os dados de um usuário
+      tags: [Usuário]
+      parameters:
+        - name: id
+          in: path
+          description: ID do usuário (UUID)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioResponse'
+        '400':
+          description: Usuário não existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { msg: 'Usuário não existe' }
+
+    put:
+      summary: Modifica os dados de um dado usuário
+      tags: [Usuário]
+      parameters:
+        - name: id
+          in: path
+          description: ID do usuário (UUID)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUsuarioDto'
+        required: true
+      responses:
+        '200':
+          description: Usuário atualizado com os novos dados.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { msg: 'Usuário atualizado.' }
+        '400':
+          description: O usuário não existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { msg: 'Usuário não existe.' }
+
+    delete:
+      summary: Apaga um dado usuário
+      tags: [Usuário]
+      parameters:
+        - name: id
+          in: path
+          description: ID do usuário (UUID)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuário removido.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { msg: 'Usuário removido.' }
+        '400':
+          description: O usuário não existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { msg: 'Usuário não existe.' }
+
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID do usuário no formato UUID.
+          example: f5e606fe-5d40-4422-9a56-8d5079e3b504
+        tipoUsuarioId:
+          type: string
+          description: ID do tipo de usuário (UUID).
+          example: 123e4567-e89b-12d3-a456-426655440000
+        nome:
+          type: string
+          description: Nome do usuário.
+          example: João Silva
+        email:
+          type: string
+          description: Endereço de e-mail do usuário.
+          example: joao.silva@example.com
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação do usuário.
+          example: '2023-07-06T10:30:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data de atualização do usuário.
+          example: '2023-07-06T10:30:00Z'
+    UsuarioListResponse:
+      type: object
+      properties:
+        usuarios:
+          type: array
+          description: Lista de usuários.
+          items:
+            $ref: '#/components/schemas/Usuario'
+    UsuarioResponse:
+      type: object
+      properties:
+        usuario:
+          $ref: '#/components/schemas/Usuario'
+    CreateUsuarioDto:
+      type: object
+      properties:
+        nome:
+          type: string
+          description: Nome do usuário.
+          example: João Silva
+        email:
+          type: string
+          description: Endereço de e-mail do usuário.
+          example: joao.s.silva@example.com
+        senha:
+          type: string
+          description: Senha do usuário.
+          example: senha123
+        tipoUsuarioId:
+          type: string
+          description: ID do tipo de usuário (UUID).
+          example: 123e4567-e89b-12d3-a456-426655440000
+    UpdateUsuarioDto:
+      type: object
+      properties:
+        nome:
+          type: string
+          description: Nome do usuário.
+          example: João Silva
+        email:
+          type: string
+          description: Endereço de e-mail do usuário.
+          example: joao.silva@example.com
+        senha:
+          type: string
+          description: Senha do usuário.
+          example: senha123
+        tipoUsuarioId:
+          type: string
+          description: ID do tipo de usuário (UUID).
+          example: 123e4567-e89b-12d3-a456-426655440000
